@@ -1,4 +1,4 @@
-#include <bi/action.h>
+#include <bi/ext/action.h>
 #include <bi/context.h>
 
 typedef struct {

@@ -1,4 +1,4 @@
-#include <bi/action.h>
+#include <bi/ext/action.h>
 
 typedef struct {
   BiAction* actions[0xFF];
@@ -29,7 +29,6 @@ static bool bi_action_sequence_update(BiNode* node, BiAction* action, double rat
 
   // all action done.
   if( current_action == NULL ) {
-    printf("* no action\n");
     return true;
   }
 

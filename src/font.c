@@ -1,9 +1,7 @@
-
-#include <bi/font.h>
+#include <bi/ext/font.h>
+#include <bi/ext/simple_unicode.h>
 #include <bi/node.h>
-#include <bi/simple_unicode.h>
 #include <bi/util.h>
-
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
