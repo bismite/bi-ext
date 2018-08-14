@@ -1,5 +1,6 @@
 #include <bi/ext/action.h>
 #include <bi/context.h>
+#include <stdlib.h>
 
 typedef struct {
   BiAction* action;

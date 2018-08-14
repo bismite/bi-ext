@@ -1,4 +1,5 @@
 #include <bi/ext/action.h>
+#include <stdlib.h>
 
 typedef struct {
   BiAction* actions[0xFF];
