@@ -67,8 +67,7 @@ void bi_update_label(BiNode* node, const char* text, const BiFontAtlas* font )
       }
       // node
       bi_node_set_position(n, x - g->base_x, y + font->base_line + (g->base_y - g->h) );
-      n->w = g->w;
-      n->h = g->h;
+      bi_node_set_size(n,g->w,g->h);
       n->visible = true;
       //texture
       n->texture->texture_image = font->texture_image;
