@@ -1,6 +1,6 @@
 CC=gcc
 AR=ar
-CFLAGS=-Wall -O3
+CFLAGS=-Wall -O3 `sdl2-config --cflags`
 INCLUDE_PATHS=
 
 BUILD_DIR=build/linux
