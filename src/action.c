@@ -27,13 +27,19 @@ static bool do_actions(BiContext* context,BiNode* node,double now,BiTimer* timer
   return true;
 }
 
-BiTimer* bi_add_action(BiContext* context,BiNode* node,BiAction* action)
+void bi_add_action(BiContext* context,BiNode* node,BiAction* action)
 {
-  BiTimer *timer = malloc(sizeof(BiTimer));
-  bi_timer_init(timer, node, do_actions, 0, -1, NULL);
+  action->_timer = malloc(sizeof(BiTimer));
+  bi_timer_init(action->_timer, node, do_actions, 0, -1, NULL);
   ActionDoer* doer = malloc(sizeof(ActionDoer));
   doer->action = action;
-  timer->userdata = doer;
-  bi_add_timer(context,timer);
-  return timer;
+  action->_timer->userdata = doer;
+  bi_add_timer(context,action->_timer);
+}
+
+void bi_remove_action(BiContext* context,BiNode* node,BiAction* action)
+{
+  bi_remove_timer(context,action->_timer);
+  free(action->_timer->userdata);
+  action->_timer = NULL;
 }

@@ -16,12 +16,14 @@ struct _BiAction {
   double start_at;
   double duration;
   void* action_data;
+  BiTimer* _timer;
 };
 
 extern void bi_action_start(BiNode *node, BiAction *action,double now);
 extern void bi_action_update(BiNode *node, BiAction *action, double rate);
 
-extern BiTimer* bi_add_action(BiContext* context,BiNode* node,BiAction* action);
+extern void bi_add_action(BiContext* context,BiNode* node,BiAction* action);
+extern void bi_remove_action(BiContext* context,BiNode* node,BiAction* action);
 
 //
 // actions
