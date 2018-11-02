@@ -1,10 +1,6 @@
 #include <bi/ext/action.h>
 #include <stdlib.h>
 
-typedef struct {
-  BiAction* action;
-} BiActionRepeat;
-
 static void bi_action_repeat_start(BiNode* node, BiAction* action,double now)
 {
   action->start_at = now;
@@ -31,11 +27,10 @@ static bool bi_action_repeat_update(BiNode* node, BiAction* action, double rate)
 
 void bi_action_repeat_init(BiAction* action,BiAction* target)
 {
-  BiActionRepeat* rep = malloc(sizeof(BiActionRepeat));
+  BiActionRepeat* rep = action->action_data;
   rep->action = target;
-
-  action->_update = bi_action_repeat_update;
-  action->_start = bi_action_repeat_start;
+  action->update = bi_action_repeat_update;
+  action->start = bi_action_repeat_start;
   action->duration = target->duration;
   action->action_data = rep;
 }

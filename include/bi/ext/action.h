@@ -11,28 +11,68 @@ typedef bool (*bi_action_update_function)(BiNode*,BiAction*,double); // target-n
 typedef void (*bi_action_on_finish_callback)(BiAction*,void*); // action,context
 
 struct _BiAction {
-  bi_action_start_function _start;
-  bi_action_update_function _update;
+  bi_action_start_function start;
+  bi_action_update_function update;
+  bi_action_on_finish_callback on_finish;
   bool finit;
+  bool finished;
   double start_at;
   double duration;
   void* action_data;
-  BiTimer* _timer;
-  bi_action_on_finish_callback on_finish;
+  BiTimer* timer;
+  BiNode* node;
   void* on_finish_callback_context;
 };
 
+extern void bi_action_init(BiAction *action);
 extern void bi_action_start(BiNode *node, BiAction *action,double now);
 extern void bi_action_update(BiNode *node, BiAction *action, double rate);
 
-extern void bi_add_action(BiContext* context,BiNode* node,BiAction* action);
-extern void bi_remove_action(BiContext* context,BiAction* action);
+extern void bi_add_action(BiNode* node, BiAction* action);
+extern void bi_remove_action(BiNode* node, BiAction* action);
 
 //
 // actions
 //
+
+// Call Function
+
+typedef void (*bi_action_call_function)(BiAction*,void*); // action,context
+
+typedef struct {
+  bi_action_call_function function;
+  void* payload;
+} BiActionCallFunction;
+
+extern void bi_action_call_function_init(BiAction* action, bi_action_call_function function,void* payload);
+
+// Move To
+
+typedef struct {
+  int from_x;
+  int from_y;
+  int to_x;
+  int to_y;
+} BiActionMoveTo;
+
 extern void bi_action_move_to_init(BiAction* action,double duration,int x,int y);
+
+// Sequence
+
+typedef struct {
+  BiAction* actions[0xFF]; // XXX: finite
+  int actions_size;
+  BiAction* current_action;
+} BiActionSequence;
+
 extern void bi_action_sequence_init(BiAction* action,size_t num,BiAction** actions);
+
+// Repeat
+
+typedef struct {
+  BiAction* action;
+} BiActionRepeat;
+
 extern void bi_action_repeat_init(BiAction* action,BiAction* target);
 
 #endif

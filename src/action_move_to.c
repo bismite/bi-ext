@@ -1,13 +1,6 @@
 #include <bi/ext/action.h>
 #include <stdlib.h>
 
-typedef struct {
-  int from_x;
-  int from_y;
-  int to_x;
-  int to_y;
-} BiActionMoveTo;
-
 static bool bi_action_move_to_update(BiNode* node, BiAction* action, double rate)
 {
   BiActionMoveTo* move_to = action->action_data;
@@ -27,11 +20,11 @@ static void bi_action_move_to_start(BiNode* node, BiAction* action,double now)
 
 void bi_action_move_to_init(BiAction* action,double duration,int x,int y)
 {
-  action->_update = bi_action_move_to_update;
-  action->_start = bi_action_move_to_start;
-  action->duration = duration;
-  BiActionMoveTo* move_to = malloc(sizeof(BiActionMoveTo));
+  BiActionMoveTo* move_to = action->action_data;
   move_to->to_x = x;
   move_to->to_y = y;
+  action->update = bi_action_move_to_update;
+  action->start = bi_action_move_to_start;
+  action->duration = duration;
   action->action_data = move_to;
 }

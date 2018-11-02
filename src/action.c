@@ -3,29 +3,56 @@
 #include <stdlib.h>
 
 typedef struct {
+  BiNode *node;
   BiAction* action;
 } ActionDoer;
 
+void bi_action_init(BiAction *action)
+{
+  action->start = NULL;
+  action->update = NULL;
+  action->on_finish = NULL;
+  action->finit = false;
+  action->finished = false;
+  action->start_at = 0;
+  action->duration = 0;
+  action->action_data = NULL;
+  action->timer = NULL;
+  action->node = NULL;
+  action->on_finish_callback_context = NULL;
+}
+
 void bi_action_start(BiNode *node, BiAction *action,double now)
 {
-  action->_start(node,action,now);
+  action->start(node,action,now);
 }
 
 void bi_action_update(BiNode *node, BiAction *action, double rate)
 {
-  action->_update(node,action,rate);
+  action->update(node,action,rate);
 }
 
-static bool do_actions(BiContext* context,BiNode* node,double now,BiTimer* timer)
+static bool do_actions(double now,BiTimer* timer)
 {
+  BiAction* a = timer->userdata;
+  BiNode *node = a->node;
   bool finish = false;
-  ActionDoer* doer = timer->userdata;
-  BiAction* a = doer->action;
+
   double rate = (now - a->start_at) / a->duration;
   if(rate<0.0) rate = 0.0;
   if(rate>1.0){
     rate = 1.0;
+  }
+
+  if(a->duration==0){
     finish = true;
+  }else{
+    double rate = (now - a->start_at) / a->duration;
+    if(rate<0.0) rate = 0.0;
+    if(rate>1.0){
+      rate = 1.0;
+      finish = true;
+    }
   }
   bi_action_update(node,a,rate);
   if( finish && a->on_finish ) {
@@ -34,18 +61,15 @@ static bool do_actions(BiContext* context,BiNode* node,double now,BiTimer* timer
   return true;
 }
 
-void bi_add_action(BiContext* context,BiNode* node,BiAction* action)
+void bi_add_action(BiNode* node,BiAction* action)
 {
-  action->_timer = bi_timer_alloc(node, do_actions, 0, -1, NULL);
-  ActionDoer* doer = malloc(sizeof(ActionDoer));
-  doer->action = action;
-  action->_timer->userdata = doer;
-  bi_add_timer(context,action->_timer);
+  action->node = node;
+  bi_timer_init(action->timer, do_actions, 0, -1, action);
+  bi_node_add_timer(node,action->timer);
 }
 
-void bi_remove_action(BiContext* context,BiAction* action)
+void bi_remove_action(BiNode* node, BiAction* action)
 {
-  bi_finish_timer(context,action->_timer);
-  free(action->_timer->userdata);
-  action->_timer = NULL;
+  BiTimer *timer = action->timer;
+  bi_node_remove_timer(node,timer);
 }

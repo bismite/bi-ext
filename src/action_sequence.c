@@ -1,12 +1,6 @@
 #include <bi/ext/action.h>
 #include <stdlib.h>
 
-typedef struct {
-  BiAction* actions[0xFF];
-  int actions_size;
-  BiAction* current_action;
-} BiActionSequence;
-
 static bool bi_action_sequence_update(BiNode* node, BiAction* action, double rate)
 {
   double now = action->start_at + action->duration * rate;
@@ -16,7 +10,7 @@ static bool bi_action_sequence_update(BiNode* node, BiAction* action, double rat
   BiAction* current_action = NULL;
   double current_action_rate = 0;
 
-  // search action
+  // search current action
   for(int i=0;i<seq->actions_size;i++) {
     end_at += seq->actions[i]->duration;
     if( start_at <= now && now <= end_at ) {
@@ -60,17 +54,14 @@ static void bi_action_sequence_start(BiNode* node, BiAction* action,double now)
 
 void bi_action_sequence_init(BiAction* action,size_t num,BiAction** actions)
 {
-  BiActionSequence* seq = malloc(sizeof(BiActionSequence));
-
-  action->_update = bi_action_sequence_update;
-  action->_start = bi_action_sequence_start;
-  action->duration = 0;
-  action->action_data = seq;
-
+  BiActionSequence* seq = action->action_data;
   seq->current_action = NULL;
   seq->actions_size = num;
   for(int i=0;i<num;i++) {
     seq->actions[i] = actions[i];
     action->duration += actions[i]->duration;
   }
+  action->update = bi_action_sequence_update;
+  action->start = bi_action_sequence_start;
+  action->action_data = seq;
 }
