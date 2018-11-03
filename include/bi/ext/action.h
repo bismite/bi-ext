@@ -81,7 +81,6 @@ extern void bi_action_move_to_init(BiAction* action,double duration,int x,int y)
 typedef struct {
   BiAction* actions[0xFF]; // XXX: finite
   int actions_size;
-  BiAction* current_action;
 } BiActionSequence;
 
 extern void bi_action_sequence_init(BiAction* action,size_t num,BiAction** actions);

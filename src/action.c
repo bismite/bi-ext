@@ -48,9 +48,11 @@ static bool do_actions(double now,BiTimer* timer)
   if(rate>=1.0){ rate = 1.0; }
   bi_action_update(node,a,rate);
 
-  if( rate >= 1.0 && a->on_finish ) {
+  if( rate >= 1.0 ) {
+    if( a->finished == false && a->on_finish ) {
+      a->on_finish(a,a->on_finish_callback_context);
+    }
     a->finished = true;
-    a->on_finish(a,a->on_finish_callback_context);
   }
   return true;
 }

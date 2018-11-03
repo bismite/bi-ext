@@ -23,6 +23,9 @@ static void run(BiNode* node, BiAction *a,double now,double start_at)
     }
     bi_action_update(node,a,rate);
     if(rate >= 1.0) {
+      if( a->finished == false && a->on_finish ) {
+        a->on_finish(a,a->on_finish_callback_context);
+      }
       a->finished = true;
     }
   }
@@ -48,7 +51,6 @@ static void bi_action_sequence_start(BiNode* node, BiAction* action,double now)
 {
   BiActionSequence* seq = action->action_data;
   action->start_at = now;
-  seq->current_action = NULL;
 
   double action_start_at = now;
   for(int i=0;i<seq->actions_size;i++) {
@@ -62,7 +64,6 @@ static void bi_action_sequence_start(BiNode* node, BiAction* action,double now)
 void bi_action_sequence_init(BiAction* action,size_t num,BiAction** actions)
 {
   BiActionSequence* seq = action->action_data;
-  seq->current_action = NULL;
   seq->actions_size = num;
   for(int i=0;i<num;i++) {
     seq->actions[i] = actions[i];
