@@ -7,7 +7,7 @@
 typedef struct _BiAction BiAction;
 
 typedef void (*bi_action_start_function)(BiNode*,BiAction*,double); // target-node,action,now
-typedef bool (*bi_action_update_function)(BiNode*,BiAction*,double); // target-node,action,rate
+typedef void (*bi_action_update_function)(BiNode*,BiAction*,double); // target-node,action,rate
 typedef void (*bi_action_on_finish_callback)(BiAction*,void*); // action,context
 
 struct _BiAction {
@@ -15,6 +15,7 @@ struct _BiAction {
   bi_action_update_function update;
   bi_action_on_finish_callback on_finish;
   bool finit;
+  bool started;
   bool finished;
   double start_at;
   double duration;

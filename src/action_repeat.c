@@ -8,7 +8,7 @@ static void bi_action_repeat_start(BiNode* node, BiAction* action,double now)
   bi_action_start(node,rep->action,now);
 }
 
-static bool bi_action_repeat_update(BiNode* node, BiAction* action, double rate)
+static void bi_action_repeat_update(BiNode* node, BiAction* action, double rate)
 {
   BiActionRepeat* rep = action->action_data;
 
@@ -22,7 +22,6 @@ static bool bi_action_repeat_update(BiNode* node, BiAction* action, double rate)
   }
 
   bi_action_update( node, rep->action, rate );
-  return true;
 }
 
 void bi_action_repeat_init(BiAction* action,BiAction* target)

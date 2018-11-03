@@ -1,13 +1,12 @@
 #include <bi/ext/action.h>
 #include <stdlib.h>
 
-static bool bi_action_move_to_update(BiNode* node, BiAction* action, double rate)
+static void bi_action_move_to_update(BiNode* node, BiAction* action, double rate)
 {
   BiActionMoveTo* move_to = action->action_data;
   int x = move_to->from_x + (move_to->to_x - move_to->from_x) * rate;
   int y = move_to->from_y + (move_to->to_y - move_to->from_y) * rate;
   bi_node_set_position(node,x,y);
-  return true;
 }
 
 static void bi_action_move_to_start(BiNode* node, BiAction* action,double now)

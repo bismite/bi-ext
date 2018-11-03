@@ -13,6 +13,7 @@ void bi_action_init(BiAction *action)
   action->update = NULL;
   action->on_finish = NULL;
   action->finit = false;
+  action->started = false;
   action->finished = false;
   action->start_at = 0;
   action->duration = 0;
@@ -36,26 +37,19 @@ static bool do_actions(double now,BiTimer* timer)
 {
   BiAction* a = timer->userdata;
   BiNode *node = a->node;
-  bool finish = false;
-
-  double rate = (now - a->start_at) / a->duration;
-  if(rate<0.0) rate = 0.0;
-  if(rate>1.0){
-    rate = 1.0;
-  }
+  double rate = 0;
 
   if(a->duration==0){
-    finish = true;
+    rate = 1.0;
   }else{
-    double rate = (now - a->start_at) / a->duration;
-    if(rate<0.0) rate = 0.0;
-    if(rate>1.0){
-      rate = 1.0;
-      finish = true;
-    }
+    rate = (now - a->start_at) / a->duration;
   }
+  if(rate<0.0){ rate = 0.0; }
+  if(rate>=1.0){ rate = 1.0; }
   bi_action_update(node,a,rate);
-  if( finish && a->on_finish ) {
+
+  if( rate >= 1.0 && a->on_finish ) {
+    a->finished = true;
     a->on_finish(a,a->on_finish_callback_context);
   }
   return true;
