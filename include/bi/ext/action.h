@@ -47,6 +47,24 @@ typedef struct {
 
 extern void bi_action_call_function_init(BiAction* action, bi_action_call_function function,void* payload);
 
+// Rotate To
+
+typedef struct {
+  int from;
+  int to;
+} BiActionRotateTo;
+
+extern void bi_action_rotate_to_init(BiAction* action,double duration,double angle);
+
+// Rotate By
+
+typedef struct {
+  int from;
+  int by;
+} BiActionRotateBy;
+
+extern void bi_action_rotate_by_init(BiAction* action,double duration,double angle);
+
 // Move To
 
 typedef struct {

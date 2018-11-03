@@ -25,5 +25,4 @@ void bi_action_move_to_init(BiAction* action,double duration,int x,int y)
   action->update = bi_action_move_to_update;
   action->start = bi_action_move_to_start;
   action->duration = duration;
-  action->action_data = move_to;
 }
