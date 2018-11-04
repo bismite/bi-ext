@@ -4,6 +4,7 @@
 static void bi_action_repeat_start(BiNode* node, BiAction* action,double now)
 {
   action->start_at = now;
+  action->node = node;
   BiActionRepeat* rep = action->action_data;
   bi_action_start(node,rep->action,now);
 }

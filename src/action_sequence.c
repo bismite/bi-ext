@@ -51,12 +51,14 @@ static void bi_action_sequence_start(BiNode* node, BiAction* action,double now)
 {
   BiActionSequence* seq = action->action_data;
   action->start_at = now;
+  action->node = node;
 
   double action_start_at = now;
   for(int i=0;i<seq->actions_size;i++) {
     seq->actions[i]->start_at = action_start_at;
     seq->actions[i]->started = false;
     seq->actions[i]->finished = false;
+    seq->actions[i]->node = node;
     action_start_at += seq->actions[i]->duration;
   }
 }

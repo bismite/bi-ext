@@ -13,6 +13,7 @@ static void bi_action_move_to_start(BiNode* node, BiAction* action,double now)
 {
   BiActionMoveTo* move_to = action->action_data;
   action->start_at = now;
+  action->node = node;
   move_to->from_x = node->x;
   move_to->from_y = node->y;
 }

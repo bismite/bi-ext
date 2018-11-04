@@ -12,6 +12,7 @@ static void bi_action_rotate_to_start(BiNode* node, BiAction* action,double now)
 {
   BiActionRotateTo* rotate_to = action->action_data;
   action->start_at = now;
+  action->node = node;
   rotate_to->from = bi_node_get_degree(node);
 }
 

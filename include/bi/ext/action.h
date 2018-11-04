@@ -36,16 +36,9 @@ extern void bi_remove_action(BiNode* node, BiAction* action);
 // actions
 //
 
-// Call Function
+// Base
 
-typedef void (*bi_action_call_function)(BiAction*,void*); // action,context
-
-typedef struct {
-  bi_action_call_function function;
-  void* payload;
-} BiActionCallFunction;
-
-extern void bi_action_call_function_init(BiAction* action, bi_action_call_function function,void* payload);
+extern void bi_action_base_init(BiAction* action);
 
 // Rotate To
 
