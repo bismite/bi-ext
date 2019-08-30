@@ -6,15 +6,11 @@
 #include <stdio.h>
 #include <string.h>
 
-void bi_load_font_layout(const char *filename, BiFontAtlas* font)
+static void bi_load_font_layout_from_rwops(SDL_RWops* rwops, BiFontAtlas* font)
 {
-  FILE *layout_file = fopen( filename, "rb");
-  if(layout_file == NULL) {
-    fprintf(stderr, "Layout: %s Load Failed.\n", filename );
-  }
-
   BiFontHeader header;
-  fread(&header,sizeof(BiFontHeader),1,layout_file);
+
+  SDL_RWread(rwops,&header,sizeof(BiFontHeader),1);
 
   font->font_size = header.font_size;
   font->base_line = header.descent-1;
@@ -25,7 +21,7 @@ void bi_load_font_layout(const char *filename, BiFontAtlas* font)
 
   for(int i=0; i<header.glyph_count; i++){
     BiGlyphLayout l;
-    size_t count = fread(&l,sizeof(BiGlyphLayout),1,layout_file);
+    size_t count = SDL_RWread(rwops,&l,sizeof(BiGlyphLayout),1);
     if(count < 1) {
       printf("%d table created.\n",i);
       break;
@@ -33,8 +29,21 @@ void bi_load_font_layout(const char *filename, BiFontAtlas* font)
     uint16_t ucs2 = utf8_to_ucs2( l.utf8 );
     font->table[ucs2] = l;
   }
+}
 
-  fclose(layout_file);
+
+void bi_load_font_layout(const char *buffer, int size, BiFontAtlas* font)
+{
+  SDL_RWops *rwops = SDL_RWFromConstMem(buffer,size);
+  bi_load_font_layout_from_rwops(rwops,font);
+  SDL_RWclose(rwops);
+}
+
+void bi_load_font_layout_from_file(const char *filename, BiFontAtlas* font)
+{
+  SDL_RWops *rwops = SDL_RWFromFile(filename,"rb");
+  bi_load_font_layout_from_rwops(rwops,font);
+  SDL_RWclose(rwops);
 }
 
 void bi_update_label(BiNode* node, const char* text, const BiFontAtlas* font )

@@ -45,7 +45,8 @@ struct _BiFontAtlas {
   uint8_t color[4];
 };
 
-extern void bi_load_font_layout(const char *filename, BiFontAtlas* font);
+extern void bi_load_font_layout(const char *buffer, int size, BiFontAtlas* font);
+extern void bi_load_font_layout_from_file(const char *filename, BiFontAtlas* font);
 
 extern void bi_update_label(BiNode* node, const char* text, const BiFontAtlas* font );
 
