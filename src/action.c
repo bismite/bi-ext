@@ -61,11 +61,11 @@ void bi_add_action(BiNode* node,BiAction* action)
 {
   action->node = node;
   bi_timer_init(action->timer, do_actions, 0, -1, action);
-  bi_node_add_timer(node,action->timer);
+  bi_add_timer(&node->timers,action->timer);
 }
 
 void bi_remove_action(BiNode* node, BiAction* action)
 {
   BiTimer *timer = action->timer;
-  bi_node_remove_timer(node,timer);
+  bi_remove_timer(&node->timers,timer);
 }
