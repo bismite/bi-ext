@@ -6,8 +6,8 @@
 struct _BiNode;
 typedef struct _BiNode BiNode;
 
-struct _BiTextureImage;
-typedef struct _BiTextureImage BiTextureImage;
+struct _BiTexture;
+typedef struct _BiTexture BiTexture;
 
 struct _BiGlyphLayout;
 typedef struct _BiGlyphLayout BiGlyphLayout;
@@ -39,7 +39,7 @@ struct _BiGlyphLayout {
 
 struct _BiFontAtlas {
   BiGlyphLayout table[0xFFFF];
-  BiTextureImage* texture_image;
+  BiTexture* texture;
   int font_size;
   int base_line;
   uint8_t color[4];

@@ -72,15 +72,15 @@ void bi_update_label(BiNode* node, const char* text, const BiFontAtlas* font )
         n = malloc(sizeof(BiNode));
         bi_node_init(n);
         bi_add_node(node,n);
-        n->texture = malloc(sizeof(BiTexture));
+        n->texture_mapping = malloc(sizeof(BiTextureMapping));
       }
       // node
       bi_node_set_position(n, x - g->base_x, y + font->base_line + (g->base_y - g->h) );
       bi_node_set_size(n,g->w,g->h);
       n->visible = true;
       //texture
-      n->texture->texture_image = font->texture_image;
-      bi_set_texture_boundary(n->texture, g->x,g->y,g->w,g->h);
+      n->texture_mapping->texture = font->texture;
+      bi_set_texture_mapping(n->texture_mapping, g->x,g->y,g->w,g->h);
       // color
       bi_set_color( n->color, font->color[0], font->color[1], font->color[2], font->color[3] );
 
