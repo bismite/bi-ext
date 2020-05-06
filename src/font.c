@@ -46,7 +46,7 @@ void bi_load_font_layout_from_file(const char *filename, BiFontAtlas* font)
   SDL_RWclose(rwops);
 }
 
-void bi_update_label(BiNode* node, const char* text, const BiFontAtlas* font )
+void bi_update_label(BiNode* node, const char* text, const BiFontAtlas* font, uint8_t r, uint8_t g, uint8_t b, uint8_t a  )
 {
   // text
   size_t textlen = strlen(text);
@@ -59,9 +59,9 @@ void bi_update_label(BiNode* node, const char* text, const BiFontAtlas* font )
   while (textlen > 0) {
       uint32_t ucs2 = utf8_getch_as_ucs2(&text, &textlen);
 
-      const BiGlyphLayout *g = &(font->table[ucs2]);
+      const BiGlyphLayout *glyph = &(font->table[ucs2]);
 
-      if(g->utf8==0 || g->w==0 || g->h==0) {
+      if(glyph->utf8==0 || glyph->w==0 || glyph->h==0) {
         continue;
       }
 
@@ -75,18 +75,25 @@ void bi_update_label(BiNode* node, const char* text, const BiFontAtlas* font )
         n->texture_mapping = malloc(sizeof(BiTextureMapping));
       }
       // node
-      bi_node_set_position(n, x - g->base_x, y + font->base_line + (g->base_y - g->h) );
-      bi_node_set_size(n,g->w,g->h);
+      bi_node_set_position(n, x - glyph->base_x, y + font->base_line + (glyph->base_y - glyph->h) );
+      bi_node_set_size(n,glyph->w,glyph->h);
       n->visible = true;
       //texture
       n->texture_mapping->texture = font->texture;
-      bi_set_texture_mapping(n->texture_mapping, g->x,g->y,g->w,g->h);
+      bi_set_texture_mapping(n->texture_mapping, glyph->x,glyph->y,glyph->w,glyph->h);
       // color
-      bi_set_color( n->color, font->color[0], font->color[1], font->color[2], font->color[3] );
+      bi_set_color( n->color, r,g,b,a );
 
-      x += g->advance_x;
+      x += glyph->advance_x;
       i++;
   }
   bi_node_set_size(node,x,font->font_size);
   bi_node_set_matrix_include_anchor_translate(node,true);
+}
+
+void bi_update_color(BiNode* node, uint8_t r, uint8_t g, uint8_t b, uint8_t a )
+{
+  for(int i=0;i<node->children_size;i++) {
+    bi_set_color( node->children[i]->color, r,g,b,a );
+  }
 }
