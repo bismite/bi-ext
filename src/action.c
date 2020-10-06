@@ -33,7 +33,7 @@ void bi_action_update(BiNode *node, BiAction *action, double rate)
   action->update(node,action,rate);
 }
 
-static bool do_actions(double now,BiTimer* timer)
+static bool do_actions(int64_t now,BiTimer* timer)
 {
   BiAction* a = timer->userdata;
   BiNode *node = a->node;
