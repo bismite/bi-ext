@@ -13,7 +13,7 @@ static void bi_load_font_layout_from_rwops(SDL_RWops* rwops, BiFontAtlas* font)
   SDL_RWread(rwops,&header,sizeof(BiFontHeader),1);
 
   font->font_size = header.font_size;
-  font->base_line = header.descent-1;
+  font->base_line = header.descent;
 
   for(int i=0;i<0xFFFF;i++) {
     font->table[i].utf8 = 0; // XXX: no-font
@@ -51,7 +51,8 @@ void bi_update_label(BiNode* node, const char* text, const BiFontAtlas* font, ui
   // text
   size_t textlen = strlen(text);
   int x = 0;
-  int y = 0;
+  int y = font->base_line;
+  int line_height = font->font_size;
   int i = 0;
   for(int i=0;i<node->children_size;i++) {
     node->children[i]->visible = false;
@@ -75,7 +76,7 @@ void bi_update_label(BiNode* node, const char* text, const BiFontAtlas* font, ui
         n->texture_mapping = malloc(sizeof(BiTextureMapping));
       }
       // node
-      bi_node_set_position(n, x - glyph->base_x, y + font->base_line + (glyph->base_y - glyph->h) );
+      bi_node_set_position(n, x + glyph->base_x, y + glyph->base_y );
       bi_node_set_size(n,glyph->w,glyph->h);
       n->visible = true;
       //texture
@@ -87,7 +88,7 @@ void bi_update_label(BiNode* node, const char* text, const BiFontAtlas* font, ui
       x += glyph->advance_x;
       i++;
   }
-  bi_node_set_size(node,x,font->font_size);
+  bi_node_set_size(node,x,line_height);
   bi_node_set_matrix_include_anchor_translate(node,true);
 }
 
