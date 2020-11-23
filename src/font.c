@@ -74,6 +74,7 @@ void bi_update_label(BiNode* node, const char* text, const BiFontAtlas* font, ui
         bi_node_init(n);
         bi_add_node(node,n);
         n->texture_mapping = malloc(sizeof(BiTextureMapping));
+        bi_texture_mapping_init(n->texture_mapping);
       }
       // node
       bi_node_set_position(n, x + glyph->base_x, y + glyph->base_y );
@@ -81,7 +82,7 @@ void bi_update_label(BiNode* node, const char* text, const BiFontAtlas* font, ui
       n->visible = true;
       //texture
       n->texture_mapping->texture = font->texture;
-      bi_set_texture_mapping(n->texture_mapping, glyph->x,glyph->y,glyph->w,glyph->h);
+      bi_texture_mapping_set_bound(n->texture_mapping, glyph->x,glyph->y,glyph->w,glyph->h);
       // color
       bi_set_color( n->color, r,g,b,a );
 
