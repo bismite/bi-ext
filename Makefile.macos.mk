@@ -6,7 +6,7 @@ INCLUDE_PATHS=
 BUILD_DIR=build/macos
 SOURCES = $(wildcard src/*.c)
 OBJECTS = $(addprefix $(BUILD_DIR)/, $(notdir $(SOURCES:.c=.o)))
-TARGET = $(BUILD_DIR)/libbiext.a
+TARGET = $(BUILD_DIR)/libbismite-ext.a
 
 all: $(BUILD_DIR) $(TARGET)
 

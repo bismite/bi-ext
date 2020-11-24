@@ -1,4 +1,4 @@
-# bi-ext
+# bismite-library-ext
 
 # License
 
