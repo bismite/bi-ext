@@ -54,8 +54,8 @@ void bi_update_label(BiNode* node, const char* text, const BiFontAtlas* font, ui
   int y = font->base_line;
   int line_height = font->font_size;
   int i = 0;
-  for(int i=0;i<node->children_size;i++) {
-    node->children[i]->visible = false;
+  for(int i=0;i<node->children.size;i++) {
+    bi_node_child_at(node,i)->visible = false;
   }
   while (textlen > 0) {
       uint32_t ucs2 = utf8_getch_as_ucs2(&text, &textlen);
@@ -67,12 +67,12 @@ void bi_update_label(BiNode* node, const char* text, const BiFontAtlas* font, ui
       }
 
       BiNode* n = NULL;
-      if( i < node->children_size ){
-        n = node->children[i];
+      if( i < node->children.size ){
+        n = bi_node_child_at(node,i);
       }else{
         n = malloc(sizeof(BiNode));
         bi_node_init(n);
-        bi_add_node(node,n);
+        bi_node_add_node(node,n);
         n->texture_mapping = malloc(sizeof(BiTextureMapping));
         bi_texture_mapping_init(n->texture_mapping);
       }
@@ -95,7 +95,7 @@ void bi_update_label(BiNode* node, const char* text, const BiFontAtlas* font, ui
 
 void bi_update_color(BiNode* node, uint8_t r, uint8_t g, uint8_t b, uint8_t a )
 {
-  for(int i=0;i<node->children_size;i++) {
-    bi_set_color( node->children[i]->color, r,g,b,a );
+  for(int i=0;i<node->children.size;i++) {
+    bi_set_color( bi_node_child_at(node,i)->color, r,g,b,a );
   }
 }
