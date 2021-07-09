@@ -33,7 +33,7 @@ void bi_action_update(BiNode *node, BiAction *action, double rate)
   action->update(node,action,rate);
 }
 
-static bool do_actions(int64_t now,BiTimer* timer)
+static bool do_actions(BiContext* context,BiTimer* timer)
 {
   BiAction* a = timer->userdata;
   BiNode *node = a->node;
@@ -42,7 +42,7 @@ static bool do_actions(int64_t now,BiTimer* timer)
   if(a->duration==0){
     rate = 1.0;
   }else{
-    rate = (now - a->start_at) / a->duration;
+    rate = (context->frame_start_at - a->start_at) / a->duration;
   }
   if(rate<0.0){ rate = 0.0; }
   if(rate>=1.0){ rate = 1.0; }
